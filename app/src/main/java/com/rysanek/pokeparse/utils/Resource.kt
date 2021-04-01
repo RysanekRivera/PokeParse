@@ -1,4 +1,4 @@
-package com.rysanek.pokeparse.data.remote
+package com.rysanek.pokeparse.utils
 
 sealed class Resource <T>(
     val data: T? = null,

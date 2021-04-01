@@ -11,5 +11,5 @@ data class PokeResponse(
     @SerializedName("previous")
     val previous: String?,
     @SerializedName("results")
-    val results: MutableList<Result>
+    val results: MutableList<InitialResult>
 )

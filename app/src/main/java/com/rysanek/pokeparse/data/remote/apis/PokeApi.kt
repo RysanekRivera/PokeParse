@@ -1,11 +1,11 @@
 package com.rysanek.pokeparse.data.remote.apis
 
-import com.rysanek.pokeparse.data.remote.models.Ability
+import com.rysanek.pokeparse.data.remote.models.Abilities
 import com.rysanek.pokeparse.data.remote.models.PokeResponse
 import com.rysanek.pokeparse.other.Constants.OFFSET
-import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PokeApi {
@@ -15,9 +15,9 @@ interface PokeApi {
         @Query("offset") offSet:Int = OFFSET
     ): Response<PokeResponse>
     
-    @GET("pokemon/")
+    @GET("pokemon/{name}")
     suspend fun getAbilities(
-        @Query("") name: String
-    ): Response<Ability>
+        @Path("name") name: String
+    ): Response<Abilities>
 
 }

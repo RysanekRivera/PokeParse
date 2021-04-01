@@ -5,37 +5,29 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.rysanek.pokeparse.data.remote.models.Result
+import com.rysanek.pokeparse.data.remote.models.Pokemon
 import com.rysanek.pokeparse.databinding.SinglePokeMiniCardBinding
 
 class PokeAdapter: RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
     
-    private val differCallback = object: DiffUtil.ItemCallback<Result>(){
-        override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
-            return oldItem == newItem
-        }
-    
-        override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
-            return oldItem == newItem
-        }
-    }
-    
-    val differList = AsyncListDiffer(this, differCallback)
-    
-    class PokeViewHolder(private val binding: SinglePokeMiniCardBinding): RecyclerView.ViewHolder(binding.root){
+    class PokeViewHolder(private val binding: SinglePokeMiniCardBinding): RecyclerView.ViewHolder(binding.root) {
         
-        companion object{
+        companion object {
+            
             fun from(parent: ViewGroup): PokeViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val holder = SinglePokeMiniCardBinding.inflate(layoutInflater, parent, false)
-                
                 return PokeViewHolder(holder)
             }
         }
         
-        fun bind(result: Result) {
-            binding.tvPokemonName.text = result.name
+        fun bind(pokemon: Pokemon) {
+            val type1 = pokemon.abilities.types[0].type?.name ?: ""
+            val type2 = if (pokemon.abilities.types.size > 1) pokemon.abilities.types[1].type?.name else ""
             
+            binding.tvPokemonName.text = pokemon.name
+            binding.chType1.text = type1
+            binding.chType2.text = type2
         }
     }
     
@@ -50,5 +42,16 @@ class PokeAdapter: RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
     
     override fun getItemCount() = differList.currentList.size
     
+    private val differCallback = object: DiffUtil.ItemCallback<Pokemon>() {
+        override fun areItemsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+            return oldItem.abilities.id == newItem.abilities.id
+        }
+        
+        override fun areContentsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+            return oldItem == newItem
+        }
+    }
+    
+    val differList = AsyncListDiffer(this, differCallback)
     
 }

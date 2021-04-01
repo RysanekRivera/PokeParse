@@ -1,20 +1,17 @@
 package com.rysanek.pokeparse.viewmodels
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.rysanek.pokeparse.data.remote.Resource
-import com.rysanek.pokeparse.data.remote.models.PokeResponse
+import com.rysanek.pokeparse.data.remote.models.Pokemon
 import com.rysanek.pokeparse.data.repository.PokeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,44 +19,37 @@ class PokeViewModel @Inject constructor(
     private val repository: PokeRepository
 ): ViewModel() {
     
-    private var pokeResponse: PokeResponse? = null
-    private var _pokeList: MutableLiveData<Resource<PokeResponse>> = MutableLiveData()
-    val pokeList = _pokeList
+    private var _pokemon: MutableLiveData<MutableList<Pokemon>> = MutableLiveData()
+    val pokemon: LiveData<MutableList<Pokemon>> = _pokemon
+    
+    private val pokemonList = mutableListOf<Pokemon>()
     
     init {
-        getPokeList()
+        getPokemon()
     }
     
-    private fun getPokeList() = viewModelScope.launch {
-        _pokeList.postValue(Resource.Loading())
-       val response = repository.getPokemon()
-        Log.d("pokeResult", response.body().toString())
-        _pokeList.postValue(handlePokeResponse(response))
-
-        _pokeList.value?.data?.results?.forEach {
-            val abilities = repository.getAbilities(it.name)
-            if (abilities.isSuccessful) {
-                val abilitiesList = abilities.body()?.ability?.name
-                Log.d("Abilities", abilitiesList.toString())
+    private fun getPokemon() = viewModelScope.launch {
+        repository.getPokemon()
+            .catch { e -> Log.d("ViewModel", "error: ${e.message}") }
+            .onCompletion {
+                _pokemon.postValue(pokemonList)
+                Log.d("viewModel", "getPokemon Completed")
             }
-        }
+            .collect { initialResult ->
+                initialResult.forEach { pokemon -> getAbilities(pokemon.name).join() }
+                Log.d("ViewModel", "initial result size ${initialResult.size}")
+            }
     }
     
-    private fun handlePokeResponse(response: Response<PokeResponse>): Resource<PokeResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let { result ->
-                if (pokeResponse == null) {
-                    pokeResponse = result
-                } else {
-                    val oldList = pokeResponse?.results
-                    val newList = result.results
-                    oldList?.addAll(newList)
-                }
-                
-                return Resource.Success(pokeResponse ?: result)
+    private fun getAbilities(name: String) = viewModelScope.launch {
+        repository.getAbilities(name)
+            .catch { e -> Log.d("ViewModel", "getAbilities error: ${e.message}") }
+            .collect { pokemon ->
+                Log.d("ViewModel", "getAbilities name: ${pokemon.name}")
+                pokemonList.add(pokemon)
+                Log.d("ViewModel", "pokemonList size: ${pokemonList.size}")
             }
-        }
         
-        return Resource.Error(response.message())
     }
+    
 }

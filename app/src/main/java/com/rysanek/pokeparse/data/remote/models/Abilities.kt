@@ -23,7 +23,7 @@ data class Abilities(
     @SerializedName("moves")
     val moves: List<Move>,
     @SerializedName("name")
-    val name: String,
+    val name: String?,
     @SerializedName("order")
     val order: Int,
     @SerializedName("past_types")

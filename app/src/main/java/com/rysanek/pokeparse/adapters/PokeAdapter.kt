@@ -2,14 +2,20 @@ package com.rysanek.pokeparse.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.rysanek.pokeparse.data.remote.models.Pokemon
 import com.rysanek.pokeparse.databinding.SinglePokeMiniCardBinding
+import com.rysanek.pokeparse.viewmodels.PokeViewModel
+import dagger.hilt.android.scopes.ActivityScoped
 
-class PokeAdapter(private val glide: RequestManager): RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
+@ActivityScoped
+class PokeAdapter(
+    private val glide: RequestManager,
+    private val pokeViewModel: PokeViewModel
+): RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
+    private val currentPokemonList= mutableListOf<Pokemon>()
     
     class PokeViewHolder(private val binding: SinglePokeMiniCardBinding): RecyclerView.ViewHolder(binding.root) {
        
@@ -38,22 +44,33 @@ class PokeAdapter(private val glide: RequestManager): RecyclerView.Adapter<PokeA
     }
     
     override fun onBindViewHolder(holder: PokeViewHolder, position: Int) {
-        val result = differList.currentList[position]
+        val result = currentPokemonList[position]
         holder.bind(result, glide)
-    }
-    
-    override fun getItemCount() = differList.currentList.size
-    
-    private val differCallback = object: DiffUtil.ItemCallback<Pokemon>() {
-        override fun areItemsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
-            return oldItem.abilities.id == newItem.abilities.id
-        }
-        
-        override fun areContentsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
-            return oldItem == newItem
+        if (holder.layoutPosition == currentPokemonList.lastIndex - 5) {
+            pokeViewModel.nextPage()
         }
     }
     
-    val differList = AsyncListDiffer(this, differCallback)
+    override fun getItemCount() = currentPokemonList.size
     
+    private fun diffCallback(newList: List<Pokemon>) = object: DiffUtil.Callback(){
+        override fun getOldListSize() = currentPokemonList.size
+    
+        override fun getNewListSize() = newList.size
+    
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return currentPokemonList[oldItemPosition].name === newList[newItemPosition].name
+        }
+    
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return currentPokemonList[oldItemPosition] == newList[newItemPosition]
+        }
+    }
+    
+    fun setData(newList: List<Pokemon>) {
+        val diffResult = DiffUtil.calculateDiff(diffCallback(newList))
+        currentPokemonList.clear()
+        currentPokemonList.addAll(newList)
+        diffResult.dispatchUpdatesTo(this)
+    }
 }

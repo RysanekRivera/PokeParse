@@ -23,7 +23,8 @@ class PokeListFragment: Fragment() {
     private lateinit var binding: FragmentPokeListBinding
     private val pokeViewModel: PokeViewModel by viewModels()
     private lateinit var pokeAdapter: PokeAdapter
-    @Inject lateinit var glide: RequestManager
+    @Inject
+    lateinit var glide: RequestManager
     
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,14 +36,14 @@ class PokeListFragment: Fragment() {
         
         pokeViewModel.pokemon.observe(viewLifecycleOwner) { pokemonList ->
             Log.d(TAG, "pokemonList: ${pokemonList.size}")
-            pokeAdapter.differList.submitList(pokemonList)
+            pokeAdapter.setData(pokemonList)
         }
         
         return binding.root
     }
     
     private fun setupRecyclerView() {
-        pokeAdapter = PokeAdapter(glide)
+        pokeAdapter = PokeAdapter(glide, pokeViewModel)
         binding.rvPokemonList.apply {
             adapter = pokeAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)

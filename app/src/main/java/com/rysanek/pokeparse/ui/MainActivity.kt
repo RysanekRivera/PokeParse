@@ -1,8 +1,7 @@
 package com.rysanek.pokeparse.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.rysanek.pokeparse.R
+import androidx.appcompat.app.AppCompatActivity
 import com.rysanek.pokeparse.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

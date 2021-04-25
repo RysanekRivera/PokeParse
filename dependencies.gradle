@@ -16,6 +16,7 @@ ext {
     paging_version = "2.1.2"
     retrofit_version = "2.9.0"
     gson_version = "2.9.0"
+    glide_version = "4.11.0"
 
     generalDependencies = [
             coreKtx: "androidx.core:core-ktx:$coreKtxVersion",
@@ -30,7 +31,8 @@ ext {
             activityKtx: "androidx.activity:activity-ktx:$appCompatVersion",
             pagingKtx: "androidx.paging:paging-runtime-ktx:$paging_version",
             retrofit: "com.squareup.retrofit2:retrofit:$retrofit_version",
-            gson:"com.squareup.retrofit2:converter-gson:$gson_version"
+            gson:"com.squareup.retrofit2:converter-gson:$gson_version",
+            glide:"com.github.bumptech.glide:glide:$glide_version"
     ]
 
     dependencyInjection = [
@@ -40,7 +42,8 @@ ext {
     annotations =  [
             kaptDagger: "com.google.dagger:hilt-compiler:$hilt_version",
             KaptRoom: "androidx.room:room-compiler:$room_version",
-            kaptViewModelLiveData: "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+            kaptViewModelLiveData: "androidx.lifecycle:lifecycle-compiler:$lifecycle_version",
+            glide:"com.github.bumptech.glide:compiler:$glide_version"
     ]
 
     testDependencies = [

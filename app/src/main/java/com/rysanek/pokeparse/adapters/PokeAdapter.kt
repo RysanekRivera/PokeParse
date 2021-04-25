@@ -5,13 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.RequestManager
 import com.rysanek.pokeparse.data.remote.models.Pokemon
 import com.rysanek.pokeparse.databinding.SinglePokeMiniCardBinding
 
-class PokeAdapter: RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
+class PokeAdapter(private val glide: RequestManager): RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
     
     class PokeViewHolder(private val binding: SinglePokeMiniCardBinding): RecyclerView.ViewHolder(binding.root) {
-        
+       
         companion object {
             
             fun from(parent: ViewGroup): PokeViewHolder {
@@ -21,13 +22,14 @@ class PokeAdapter: RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
             }
         }
         
-        fun bind(pokemon: Pokemon) {
+        fun bind(pokemon: Pokemon, glide: RequestManager) {
             val type1 = pokemon.abilities.types[0].type?.name ?: ""
             val type2 = if (pokemon.abilities.types.size > 1) pokemon.abilities.types[1].type?.name else ""
             
             binding.tvPokemonName.text = pokemon.name
             binding.chType1.text = type1
             binding.chType2.text = type2
+            glide.load(pokemon.abilities.sprites.frontDefault).into(binding.ivPokeImage)
         }
     }
     
@@ -37,7 +39,7 @@ class PokeAdapter: RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
     
     override fun onBindViewHolder(holder: PokeViewHolder, position: Int) {
         val result = differList.currentList[position]
-        holder.bind(result)
+        holder.bind(result, glide)
     }
     
     override fun getItemCount() = differList.currentList.size

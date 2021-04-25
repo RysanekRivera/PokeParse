@@ -30,26 +30,28 @@ class PokeViewModel @Inject constructor(
     
     private fun getPokemon() = viewModelScope.launch {
         repository.getPokemon()
-            .catch { e -> Log.d("ViewModel", "error: ${e.message}") }
+            .catch { e -> Log.d("PokeViewModel", "error: ${e.message}") }
             .onCompletion {
                 _pokemon.postValue(pokemonList)
-                Log.d("viewModel", "getPokemon Completed")
+                Log.d("PokeViewModel", "getPokemon Completed")
             }
             .collect { initialResult ->
-                initialResult.forEach { pokemon -> getAbilities(pokemon.name).join() }
-                Log.d("ViewModel", "initial result size ${initialResult.size}")
+                initialResult.forEach { pokemon ->
+                    getAbilities(pokemon.name).join()
+                    
+                }
+                Log.d("PokeViewModel", "initial result size ${initialResult.size}")
             }
     }
     
     private fun getAbilities(name: String) = viewModelScope.launch {
         repository.getAbilities(name)
-            .catch { e -> Log.d("ViewModel", "getAbilities error: ${e.message}") }
+            .catch { e -> Log.d("PokeViewModel", "getAbilities error: ${e.message}") }
             .collect { pokemon ->
-                Log.d("ViewModel", "getAbilities name: ${pokemon.name}")
+                Log.d("PokeViewModel", "getAbilities name: ${pokemon.name}")
                 pokemonList.add(pokemon)
-                Log.d("ViewModel", "pokemonList size: ${pokemonList.size}")
+                Log.d("PokeViewModel", "pokemonList size: ${pokemonList.size}")
             }
-        
     }
     
 }

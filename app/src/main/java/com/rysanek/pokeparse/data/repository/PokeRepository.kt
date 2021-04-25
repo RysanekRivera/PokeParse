@@ -10,20 +10,25 @@ class PokeRepository @Inject constructor(
     private val api: PokeApi
 ) {
     fun getPokemon() = flow {
-        val pokeResult = api.getPokemonResult()
-        if (pokeResult.isSuccessful) {
-            pokeResult.body()?.let {
-                emit(it.results)
+        val networkResponse = api.getPokemonResult()
+        if (networkResponse.isSuccessful) {
+            Log.d("Repository", "result successful: ${networkResponse.isSuccessful}")
+            networkResponse.body()?.let { pokeResponse ->
+                emit(pokeResponse.results)
             }
+        } else {
+            Log.d("Repository", "result Error: ${networkResponse.message()}")
         }
-        Log.d("Repository", "result successful: ${pokeResult.isSuccessful}")
     }
     
-    fun getAbilities(name: String) = flow {
-        val networkResponse = api.getAbilities(name)
-        Log.d("Repository", "getAbilities successful: ${networkResponse.isSuccessful}")
+    fun getAbilities(pokemonName: String) = flow {
+        val networkResponse = api.getAbilities(pokemonName)
+       
         if (networkResponse.isSuccessful){
-            networkResponse.body()?.let { abilities -> emit(Pokemon(name, abilities)) }
+            networkResponse.body()?.let { abilities -> emit(Pokemon(pokemonName, abilities)) }
+            Log.d("Repository", "getAbilities successful: ${networkResponse.isSuccessful}")
+        } else {
+            Log.d("Repository", "result Error: ${networkResponse.message()}")
         }
     }
 }

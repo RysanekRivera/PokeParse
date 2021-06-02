@@ -8,11 +8,39 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
+    <color name="semi_transparent">#4DFFFFFF</color>
+    
+    <color name="light_blue">#80d8ff</color>
+    <color name="light_blue_20">#3380d8ff</color>
+    <color name="yellow">#ffd740</color>
+    <color name="yellow_20">#33ffd740</color>
+    <color name="red">#b71c1c</color>
+    <color name="grey">#cccccc</color>
+    <color name="grey_50">#80cccccc</color>
+    <color name="mustard">#e1ad01</color>
+    <color name="mustard_light">#feca1d</color>
+    
+    //Pokemon Types
     <color name="grass">#32d8ac</color>
     <color name="fire">#ba3e12</color>
     <color name="poison">#580075</color>
     <color name="normal">#737170</color>
     <color name="flying">#1dbad3</color>
     <color name="water">#2155ff</color>
+    <color name="fairy">#EE99AC</color>
+    <color name="fighting">#7D1F1A</color>
+    <color name="steel">#B8B8D0</color>
+    <color name="ghost">#705898</color>
+    <color name="ground">#E0C068</color>
+    <color name="ice">#98D8D8</color>
+    <color name="psychic">#F85888</color>
+    <color name="rock">#B8A038</color>
+    <color name="dark">#705848</color>
+    <color name="bug">#A8B820</color>
+    <color name="dragon">#7038F8</color>
+    
+    //System Bars
+    <color name="navigation_bar_color">#01ff5f4f</color>
+    <color name="status_bar_color">#01f7cd47</color>
     
 </resources>

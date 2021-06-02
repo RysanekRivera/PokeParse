@@ -7,14 +7,14 @@
     android:layout_height="wrap_content">
     
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
+        android:id="@+id/cvPokeCard"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:backgroundTint="@color/grass"
-        app:cardCornerRadius="24dp"
+        app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,46 +29,51 @@
                 android:id="@+id/tvPokemonName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:text="Bulbasaur"
+                tools:text="Bulbasaur"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         
             <com.google.android.material.chip.Chip
                 android:id="@+id/chType1"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:backgroundTint="@color/semi_transparent"
+                app:layout_constraintEnd_toStartOf="@+id/chType2"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvPokemonName" />
         
             <com.google.android.material.chip.Chip
                 android:id="@+id/chType2"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/chType1"
-                app:layout_constraintStart_toStartOf="@+id/chType1"
-                app:layout_constraintTop_toBottomOf="@+id/chType1" />
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:backgroundTint="@color/semi_transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/chType1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/chType1"
+                app:layout_constraintTop_toTopOf="@+id/chType1" />
         
             <ImageView
                 android:id="@+id/ivPokeImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="10dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="8dp"
                 android:elevation="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/chType1"
-                app:layout_constraintTop_toBottomOf="@+id/tvPokemonName"
-                app:layout_constraintVertical_bias="0.0"
-                tools:srcCompat="@tools:sample/avatars" />
-        
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chType1"
+                tools:srcCompat="@tools:sample/avatars"
+                android:contentDescription="@string/pokemon_image" />
+    
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -2,7 +2,6 @@ package com.rysanek.pokeparse.data.remote.apis
 
 import com.rysanek.pokeparse.data.remote.models.Abilities
 import com.rysanek.pokeparse.data.remote.models.PokeResponse
-import com.rysanek.pokeparse.other.Constants.OFFSET
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -12,7 +11,7 @@ interface PokeApi {
 
     @GET("pokemon/")
     suspend fun getPokemonResult(
-        @Query("offset") offSet:Int = OFFSET
+        @Query("offset") offSet:Int
     ): Response<PokeResponse>
     
     @GET("pokemon/{name}")
